@@ -1,7 +1,6 @@
 # cvxpyrepair
 
-cvxpyrepair is a Python package that implements the algorithms described in our paper [Automatic repair of convex optimization problems]
-(https://web.stanford.edu/~sbarratt/auto_repair_cvx.pdf).
+cvxpyrepair is a Python package that implements the algorithms described in our paper [Automatic repair of convex optimization problems](https://web.stanford.edu/~sbarratt/auto_repair_cvx.pdf).
 
 ## Installation
 
