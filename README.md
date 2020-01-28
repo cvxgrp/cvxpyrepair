@@ -13,17 +13,17 @@ pip install .
 
 Navigate to the `examples` folder.
 
-To run the spacecraft landing example, run:
+To run the spacecraft landing example:
 ```
 python spacecraft_landing.py
 ```
 
-To run the arbitrage example, run:
+To run the arbitrage example:
 ```
 python arbitrage.py
 ```
 
-To run the boolean LP example, run:
+To run the boolean LP example:
 ```
 python boolean_lp.py
 ```
