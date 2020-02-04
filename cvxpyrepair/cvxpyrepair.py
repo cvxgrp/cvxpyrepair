@@ -69,7 +69,6 @@ def repair(prob, params, r=None, verbose=True, maxiter=10, maxiter_pgm=25,
                     new_params += [old_params[i] -
                                    lr * param_derivative[i]]
 
-                print(old_params[0], param_derivative[0])
                 if r is not None:
                     variable_params = [cp.Variable(
                         p.shape) for p in params]
