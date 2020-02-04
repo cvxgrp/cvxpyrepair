@@ -46,12 +46,13 @@ def repair(prob, params, r=None, verbose=True, maxiter=10, maxiter_pgm=25,
                 dict(zip(param_ids, [p.value for p in params])))
             A = -neg_A
             dA, db, dc, t, _, _, _, warm_start = derivative(
-                A, b, c, cone_dict, warm_start=warm_start, acceleration_lookback=0, eps=1e-6)
+                A, b, c, cone_dict, warm_start=warm_start, acceleration_lookback=0, eps=1e-8)
             del_param_dict = compiler.apply_param_jac(dc, -dA, db)
             param_derivative = [del_param_dict[i] for i in param_ids]
 
             # compute objective
             objective = t
+            new_objective = float("inf")
             if r is not None:
                 variable_params = [cp.Variable(p.shape) for p in params]
                 for vp, p in zip(variable_params, params):
@@ -68,6 +69,7 @@ def repair(prob, params, r=None, verbose=True, maxiter=10, maxiter_pgm=25,
                     new_params += [old_params[i] -
                                    lr * param_derivative[i]]
 
+                print(old_params[0], param_derivative[0])
                 if r is not None:
                     variable_params = [cp.Variable(
                         p.shape) for p in params]
@@ -82,13 +84,16 @@ def repair(prob, params, r=None, verbose=True, maxiter=10, maxiter_pgm=25,
                         prob.solve(solver=cp.SCS, acceleration_lookback=0)
                     for i in range(len(param_ids)):
                         params[i].value = variable_params[i].value
+                else:
+                    for i in range(len(param_ids)):
+                        params[i].value = new_params[i]
 
                 # compute objective
                 c, _, neg_A, b = compiler.apply_parameters(
                     dict(zip(param_ids, [p.value for p in params])))
                 A = -neg_A
                 _, _, _, t_new, _, _, _, warm_start = derivative(
-                    A, b, c, cone_dict, warm_start=warm_start, acceleration_lookback=0)
+                    A, b, c, cone_dict, warm_start=warm_start, acceleration_lookback=0, eps=1e-8)
                 new_objective = t_new
                 if r is not None:
                     variable_params = [cp.Variable(p.shape) for p in params]
@@ -106,7 +111,6 @@ def repair(prob, params, r=None, verbose=True, maxiter=10, maxiter_pgm=25,
                     break
 
             if lr <= 1e-6:
-                lr = 1e-4
                 break
 
         # update lam

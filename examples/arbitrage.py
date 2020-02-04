@@ -55,4 +55,4 @@ diff = R.value - R0
 diff[np.abs(diff) < 1e-5] = 0.0
 print(bmatrix(diff))
 
-print(prob.solve())
+print(prob.solve(solver=cp.SCS))
